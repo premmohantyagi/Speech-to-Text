@@ -1,0 +1,9 @@
+{
+    "name": "speech-to-text/app",
+    "description": "Speech to Text using OpenAI Whisper",
+    "require": {
+        "phpoffice/phpword": "^1.1",
+        "dompdf/dompdf": "^2.0",
+        "smalot/pdfparser": "^2.12"
+    }
+}

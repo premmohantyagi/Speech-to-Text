@@ -1,0 +1,7 @@
+vendor/
+uploads/*
+!uploads/.gitkeep
+transcriptions/*
+!transcriptions/.gitkeep
+*.pyc
+__pycache__/

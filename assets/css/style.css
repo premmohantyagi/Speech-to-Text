@@ -1,0 +1,913 @@
+/* ============================================
+   Speech-to-Text App — Stylesheet
+   ============================================ */
+
+/* ----- 1. CSS Reset & Variables ----- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #4338ca;
+  --primary-hover: #3730a3;
+  --bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --highlight: #fef08a;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100%;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ----- 2. Layout ----- */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.app-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.app-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* ----- 3. Tab Navigation ----- */
+
+.tab-nav {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-light);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.tab-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ----- 4. Upload Zone ----- */
+
+.upload-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.upload-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.upload-header .file-count {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.drop-zone:hover {
+  border-color: #c7d2fe;
+  background: #f5f3ff;
+}
+
+.drop-zone.drag-over {
+  border-color: var(--primary);
+  background: #eef2ff;
+}
+
+.cloud-icon {
+  font-size: 3rem;
+  color: #c7c7cc;
+  margin-bottom: 12px;
+}
+
+.cloud-icon svg {
+  width: 56px;
+  height: 56px;
+  stroke: #c7c7cc;
+}
+
+.drop-zone p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.drop-zone .browse-link {
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.drop-zone .browse-link:hover {
+  text-decoration: underline;
+}
+
+.file-types {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 8px;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ----- 5. File List ----- */
+
+.file-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.file-item .file-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #eef2ff;
+  color: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.file-item .file-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-item .file-size {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+.file-item .remove-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  transition: color 0.15s, background 0.15s;
+}
+
+.file-item .remove-btn:hover {
+  color: var(--danger);
+  background: #fef2f2;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 8px 8px;
+  transition: width 0.3s ease;
+}
+
+/* ----- 6. Mic Recording (Dictation) Page ----- */
+
+.dictation-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.mic-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.mic-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  position: relative;
+}
+
+.mic-btn:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+.mic-btn.recording {
+  background: var(--danger);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.mic-btn.recording:hover {
+  background: #dc2626;
+}
+
+.mic-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.waveform {
+  width: 100%;
+  max-width: 500px;
+  height: 80px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.timer {
+  font-size: 2rem;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 16px rgba(239, 68, 68, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+}
+
+/* ----- 7. Editor Page ----- */
+
+body.editor-page {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.editor-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  gap: 12px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.file-name {
+  flex: 1;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.export-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.export-dropdown {
+  position: relative;
+}
+
+.btn-export {
+  padding: 8px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-export:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 160px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.export-menu.open {
+  display: block;
+}
+
+.export-menu a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  color: var(--text);
+  transition: background 0.1s;
+}
+
+.export-menu a:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+.btn-save {
+  padding: 8px 20px;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-save:hover {
+  background: var(--primary-hover);
+}
+
+.editor-container {
+  flex: 1;
+  padding: 20px;
+  margin-bottom: 100px; /* space for fixed audio player */
+  overflow-y: auto;
+}
+
+/* ----- 8. Synced Audio Player (Fixed Bottom Bar) ----- */
+
+.audio-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #1f2937;
+  color: #ffffff;
+  padding: 12px 20px;
+  z-index: 500;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.player-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.player-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.player-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.time-display {
+  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #d1d5db;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.seek-bar {
+  flex: 1;
+  min-width: 0;
+}
+
+.speed-control {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.speed-btn {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid #4b5563;
+  background: transparent;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.speed-btn:hover {
+  border-color: #9ca3af;
+  color: #ffffff;
+}
+
+.speed-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.volume-bar {
+  width: 70px;
+  flex-shrink: 0;
+}
+
+/* ----- 9. Word Sync Highlighting ----- */
+
+.word {
+  cursor: pointer;
+  padding: 1px 0;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+
+.word:hover {
+  background: #f3f4f6;
+}
+
+.word.active {
+  background: var(--highlight);
+}
+
+/* ----- 10. Processing / Loading Overlay ----- */
+
+.processing-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  gap: 20px;
+}
+
+.processing-overlay.active {
+  display: flex;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.processing-overlay p {
+  font-size: 1rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* ----- 11. Responsive ----- */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+
+  .app-title {
+    font-size: 1.4rem;
+  }
+
+  .app-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .drop-zone {
+    padding: 32px 16px;
+  }
+
+  .cloud-icon {
+    font-size: 2.4rem;
+  }
+
+  .editor-header {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .btn-export,
+  .btn-save {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .player-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .seek-bar {
+    order: 10;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .speed-control {
+    order: 11;
+  }
+
+  .volume-bar {
+    order: 12;
+  }
+
+  .timer {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px;
+  }
+
+  .app-title {
+    font-size: 1.2rem;
+  }
+
+  .tab-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+
+  .upload-card {
+    padding: 16px;
+  }
+
+  .drop-zone {
+    padding: 24px 12px;
+  }
+
+  .mic-btn {
+    width: 64px;
+    height: 64px;
+    font-size: 1.4rem;
+  }
+
+  .dictation-card {
+    padding: 24px 16px;
+  }
+
+  .editor-header {
+    padding: 8px 10px;
+  }
+
+  .file-name {
+    font-size: 0.85rem;
+  }
+
+  .export-group {
+    gap: 4px;
+  }
+
+  .back-btn {
+    font-size: 0.8rem;
+  }
+
+  .audio-player {
+    padding: 10px 12px;
+  }
+
+  .player-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+
+  .time-display {
+    font-size: 0.7rem;
+  }
+
+  .speed-btn {
+    padding: 3px 7px;
+    font-size: 0.65rem;
+  }
+
+  .volume-bar {
+    width: 50px;
+  }
+}
+
+/* ----- 12. Custom Range Input Styling ----- */
+
+/* Reset for all range inputs */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 20px;
+}
+
+/* Webkit Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #4b5563;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #ffffff;
+  margin-top: -5px;
+  transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Firefox Track */
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #4b5563;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Seek bar specific (lighter track for dark player background) */
+.seek-bar::-webkit-slider-runnable-track {
+  background: #4b5563;
+}
+
+.seek-bar::-moz-range-track {
+  background: #4b5563;
+}
+
+/* Volume bar specific */
+.volume-bar::-webkit-slider-runnable-track {
+  background: #4b5563;
+  height: 3px;
+}
+
+.volume-bar::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4.5px;
+}
+
+.volume-bar::-moz-range-track {
+  background: #4b5563;
+  height: 3px;
+}
+
+.volume-bar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+/* Focus styles for accessibility */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.3);
+}
+
+input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.3);
+}
